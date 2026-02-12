@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameflix</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:#141414;
+    color:white;
+}
+
+/* NAVBAR */
+.navbar {
+    position:fixed;
+    top:0;
+    width:100%;
+    padding:20px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    z-index:1000;
+}
+
+.logo {
+    color:#e50914;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.menu {
+    display:flex;
+    gap:20px;
+    font-size:14px;
+}
+
+.menu span {
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.menu span:hover {
+    color:#b3b3b3;
+}
+
+/* BANNER */
+.banner {
+    height:60vh;
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    align-items:flex-end;
+    padding:60px;
+    position:relative;
+    margin-bottom:40px;
+}
+
+.banner::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, #141414 10%, transparent 60%);
+}
+
+.banner-content {
+    position:relative;
+    z-index:2;
+    max-width:600px;
+}
+
+.banner h1 {
+    font-size:50px;
+    margin-bottom:10px;
+}
+
+.banner p {
+    font-size:16px;
+    margin-bottom:20px;
+    color:#ddd;
+}
+
+/* ROWS */
+.container {
+    padding:0 50px 50px 50px;
+}
+
+.row {
+    margin-bottom:40px;
+}
+
+.row h2 {
+    margin-bottom:15px;
+}
+
+.row-posters {
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding-bottom:10px;
+}
+
+.poster {
+    width:200px;
+    height:300px;
+    background-size:cover;
+    background-position:center;
+    border-radius:4px;
+    cursor:pointer;
+    transition:transform 0.3s ease;
+}
+
+.poster:hover {
+    transform:scale(1.1);
+}
+
+/* MODAL */
+.modal {
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+}
+
+.modal-content {
+    width:60%;
+    max-height:80%;
+    position:relative;
+    background:#141414;
+    padding:20px;
+    border-radius:8px;
+    overflow-y:auto;
+    color:white;
+}
+
+.close {
+    position:absolute;
+    top:10px;
+    right:20px;
+    font-size:30px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">GAMEFLIX</div>
+    <div class="menu">
+        <span>Início</span>
+        <span>Jogos</span>
+        <span>Novidades</span>
+        <span>Minha Lista</span>
+    </div>
+</div>
+
+<!-- BANNER -->
+<div class="banner" id="banner">
+    <div class="banner-content">
+        <h1 id="bannerTitle"></h1>
+        <p id="bannerDesc"></p>
+    </div>
+</div>
+
+<!-- ROWS -->
+<div class="container">
+    <div class="row">
+        <h2>Todos os Jogos</h2>
+        <div class="row-posters" id="gameRow"></div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <h2 id="gameTitle"></h2>
+        <p id="gameDescription"></p>
+    </div>
+</div>
+
+<script>
+// Array de todos os jogos com placeholders de capa
+const games = [
+  { title:"Grand Theft Auto V", image:"https://via.placeholder.com/200x300?text=GTA+V", desc:"Crime e mundo aberto em Los Santos." },
+  { title:"Red Dead Redemption 2", image:"https://via.placeholder.com/200x300?text=RDR+2", desc:"Velho Oeste em mundo aberto." },
+  { title:"Cyberpunk 2077", image:"https://via.placeholder.com/200x300?text=Cyberpunk+2077", desc:"RPG futurista em Night City." },
+  { title:"The Elder Scrolls V: Skyrim", image:"https://via.placeholder.com/200x300?text=Skyrim", desc:"Aventura épica de fantasia." },
+  { title:"ELDEN RING", image:"https://via.placeholder.com/200x300?text=Elden+Ring", desc:"Fantasia sombria desafiadora." },
+  { title:"Call of Duty®: Modern Warfare®", image:"https://via.placeholder.com/200x300?text=COD+MW", desc:"FPS militar moderno." },
+  { title:"Call of Duty®: Black Ops 6", image:"https://via.placeholder.com/200x300?text=COD+BO6", desc:"Operações secretas intensas." },
+  { title:"Batman™: Arkham Knight", image:"https://via.placeholder.com/200x300?text=Batman+Arkham+Knight", desc:"Ação com o Cavaleiro das Trevas." },
+  { title:"The Witcher 3: Wild Hunt", image:"https://via.placeholder.com/200x300?text=Witcher+3", desc:"Aventura épica de RPG." },
+  { title:"God of War Ragnarök", image:"https://via.placeholder.com/200x300?text=God+of+War+Ragnarok", desc:"Ação mitológica." },
+  { title:"God of War", image:"https://via.placeholder.com/200x300?text=God+of+War", desc:"Ação e mitologia nórdica." },
+  { title:"Horizon Forbidden West", image:"https://via.placeholder.com/200x300?text=Horizon+Forbidden+West", desc:"Aventura futurista com robôs." },
+  { title:"Bodycam", image:"https://via.placeholder.com/200x300?text=Bodycam", desc:"Jogo de ação policial." },
+  { title:"Call of Duty®: Black Ops III", image:"https://via.placeholder.com/200x300?text=COD+BO3", desc:"FPS futurista." },
+  { title:"Call of Duty®: Black Ops II", image:"https://via.placeholder.com/200x300?text=COD+BO2", desc:"Operações secretas intensas." },
+  { title:"Call of Duty®: Black Ops", image:"https://via.placeholder.com/200x300?text=COD+BO", desc:"FPS tático." },
+  { title:"Marvel's Spider-Man 2", image:"https://via.placeholder.com/200x300?text=Spider-Man+2", desc:"Aventura do Homem-Aranha." },
+  { title:"Marvel's Spider-Man: Miles Morales", image:"https://via.placeholder.com/200x300?text=Spider-Man+Miles", desc:"O jovem herói em ação." },
+  { title:"Horizon Zero Dawn™ Complete Edition", image:"https://via.placeholder.com/200x300?text=Horizon+Zero+Dawn", desc:"Aventura futurista com robôs." },
+  { title:"Ghost of Tsushima DIRECTOR'S CUT", image:"https://via.placeholder.com/200x300?text=Ghost+of+Tsushima", desc:"Samurai na ilha Tsushima." },
+  { title:"The Last of Us Part I", image:"https://via.placeholder.com/200x300?text=The+Last+of+Us", desc:"Drama pós-apocalíptico." },
+  { title:"Hogwarts Legacy", image:"https://via.placeholder.com/200x300?text=Hogwarts+Legacy", desc:"Aventura no mundo de Harry Potter." },
+  { title:"Call of Duty®: Ghosts", image:"https://via.placeholder.com/200x300?text=COD+Ghosts", desc:"FPS tático." },
+  { title:"Call of Duty®: WWII", image:"https://via.placeholder.com/200x300?text=COD+WWII", desc:"FPS da Segunda Guerra Mundial." },
+  { title:"Battlefield™ V", image:"https://via.placeholder.com/200x300?text=Battlefield+V", desc:"FPS histórico." },
+  { title:"Battlefield 4™", image:"https://via.placeholder.com/200x300?text=Battlefield+4", desc:"FPS moderno." },
+  { title:"Left 4 Dead 2", image:"https://via.placeholder.com/200x300?text=Left+4+Dead+2", desc:"Co-op zumbi." },
+  { title:"Assassin's Creed Valhalla", image:"https://via.placeholder.com/200x300?text=AC+Valhalla", desc:"Viking e ação." },
+  { title:"Assassin's Creed® Odyssey", image:"https://via.placeholder.com/200x300?text=AC+Odyssey", desc:"Grécia antiga e RPG." },
+  { title:"Assassin's Creed® Origins", image:"https://via.placeholder.com/200x300?text=AC+Origins", desc:"Egito antigo e ação." },
+  { title:"Assassin's Creed® IV Black Flag™", image:"https://via.placeholder.com/200x300?text=AC+Black+Flag", desc:"Piratas e aventura." },
+  { title:"Assassin's Creed® Unity", image:"https://via.placeholder.com/200x300?text=AC+Unity", desc:"Revolução Francesa e ação." },
+  { title:"Assassin's Creed® III", image:"https://via.placeholder.com/200x300?text=AC+III", desc:"Colonial America." },
+  { title:"Assassin's Creed 2", image:"https://via.placeholder.com/200x300?text=AC+2", desc:"Renascença Italiana." },
+  { title:"HITMAN World of Assassination", image:"https://via.placeholder.com/200x300?text=Hitman", desc:"Assassino profissional." },
+  { title:"METAL GEAR SOLID V: THE PHANTOM PAIN", image:"https://via.placeholder.com/200x300?text=MGS+V", desc:"Stealth e ação militar." },
+  { title:"UNCHARTED™: Legacy of Thieves Collection", image:"https://via.placeholder.com/200x300?text=Uncharted", desc:"Aventura arqueológica." },
+  { title:"Tomb Raider", image:"https://via.placeholder.com/200x300?text=Tomb+Raider", desc:"Aventura arqueológica com Lara Croft." },
+  { title:"Days Gone", image:"https://via.placeholder.com/200x300?text=Days+Gone", desc:"Mundo pós-apocalíptico com zumbis." },
+  { title:"Dying Light 2 Stay Human: Reloaded Edition", image:"https://via.placeholder.com/200x300?text=Dying+Light+2", desc:"Parkour e zumbis." },
+  { title:"Mortal Kombat 1", image:"https://via.placeholder.com/200x300?text=Mortal+Kombat+1", desc:"Luta brutal." },
+  { title:"Mortal Kombat 11", image:"https://via.placeholder.com/200x300?text=Mortal+Kombat+11", desc:"Luta intensa." },
+  { title:"Mortal Kombat X", image:"https://via.placeholder.com/200x300?text=Mortal+Kombat+X", desc:"Luta sangrenta." },
+  { title:"TEKKEN 8", image:"https://via.placeholder.com/200x300?text=Tekken+8", desc:"Luta 3D." },
+  { title:"TEKKEN 7", image:"https://via.placeholder.com/200x300?text=Tekken+7", desc:"Torneio de luta." },
+  { title:"Street Fighter V", image:"https://via.placeholder.com/200x300?text=SF+V", desc:"Luta clássica." },
+  { title:"Resident Evil Village", image:"https://via.placeholder.com/200x300?text=RE+Village", desc:"Terror de sobrevivência." },
+  { title:"Resident Evil 2", image:"https://via.placeholder.com/200x300?text=RE+2", desc:"Terror zumbi." },
+  { title:"Resident Evil 3", image:"https://via.placeholder.com/200x300?text=RE+3", desc:"Terror clássico." },
+  { title:"Resident Evil 4", image:"https://via.placeholder.com/200x300?text=RE+4", desc:"Sobrevivência intensa." },
+  { title:"Resident Evil 5", image:"https://via.placeholder.com/200x300?text=RE+5", desc:"Ação e terror." },
+  { title:"Resident Evil 6", image:"https://via.placeholder.com/200x300?text=RE+6", desc:"Terror moderno." },
+  { title:"Dead Island 2", image:"https://via.placeholder.com/200x300?text=Dead+Island+2", desc:"Zumbis e sobrevivência." },
+  { title:"Far Cry® 6", image:"https://via.placeholder.com/200x300?text=Far+Cry+6", desc:"Ação em mundo aberto." },
+  { title:"Far Cry® 5", image:"https://via.placeholder.com/200x300?text=Far+Cry+5", desc:"Missões em Montana." },
+  { title:"Far Cry® 4", image:"https://via.placeholder.com/200x300?text=Far+Cry+4", desc:"Aventura nos Himalaias." },
+  { title:"Far Cry 3", image:"https://via.placeholder.com/200x300?text=Far+Cry+3", desc:"Sobrevivência em ilha." },
+  { title:"Far Cry® Primal", image:"https://via.placeholder.com/200x300?text=Far+Cry+Primal", desc:"Idade da Pedra." },
+  { title:"Monster Hunter: World", image:"https://via.placeholder.com/200x300?text=Monster+Hunter+World", desc:"Caça a monstros." },
+  { title:"Black Myth: Wukong", image:"https://via.placeholder.com/200x300?text=Black+Myth+Wukong", desc:"Ação mitológica chinesa." },
+  { title:"Lies of P", image:"https://via.placeholder.com/200x300?text=Lies+of+P", desc:"Aventura sombria." },
+  { title:"DayZ", image:"https://via.placeholder.com/200x300?text=DayZ", desc:"Sobrevivência zumbi." },
+  { title:"Watch_Dogs® 2", image:"https://via.placeholder.com/200x300?text=Watch+Dogs+2", desc:"Hackeando o mundo." },
+  { title:"Watch_Dogs™", image:"https://via.placeholder.com/200x300?text=Watch+Dogs", desc:"Ação e hacking." },
+  { title:"Tom Clancy's Ghost Recon® Wildlands", image:"https://via.placeholder.com/200x300?text=Ghost+Recon+Wildlands", desc:"Ação tática militar." },
+  { title:"Sniper Elite 4", image:"https://via.placeholder.com/200x300?text=Sniper+Elite+4", desc:"Sniper tático." },
+  { title:"Mad Max", image:"https://via.placeholder.com/200x300?text=Mad+Max", desc:"Ação pós-apocalíptica." },
+  { title:"Liar's Bar", image:"https://via.placeholder.com/200x300?text=Liar's+Bar", desc:"Jogo de mistério." },
+  { title:"RIDE 5", image:"https://via.placeholder.com/200x300?text=RIDE+5", desc:"Corrida de motos." },
+  { title:"Forza Motorsport", image:"https://via.placeholder.com/200x300?text=Forza+Motorsport", desc:"Corridas realistas." },
+  { title:"Forza Horizon 5", image:"https://via.placeholder.com/200x300?text=Forza+Horizon+5", desc:"Corridas abertas." },
+  { title:"Forza Horizon 4", image:"https://via.placeholder.com/200x300?text=Forza+Horizon+4", desc:"Corridas na Grã-Bretanha." },
+  { title:"Need for Speed™ Heat", image:"https://via.placeholder.com/200x300?text=NFS+Heat", desc:"Corridas de rua." },
+  { title:"Need for Speed™ Most Wanted", image:"https://via.placeholder.com/200x300?text=NFS+Most+Wanted", desc:"Corridas ilegais." },
+  { title:"Need for Speed™ Payback", image:"https://via.placeholder.com/200x300?text=NFS+Payback", desc:"Corridas e ação." },
+  { title:"Need for Speed™", image:"https://via.placeholder.com/200x300?text=NFS", desc:"Corridas de rua." },
+  { title:"Farming Simulator 25", image:"https://via.placeholder.com/200x300?text=Farming+Simulator+25", desc:"Simulação agrícola." },
+  { title:"Injustice™ 2", image:"https://via.placeholder.com/200x300?text=Injustice+2", desc:"Luta de super-heróis." },
+  { title:"Crash Bandicoot™ N. Sane Trilogy", image:"https://via.placeholder.com/200x300?text=Crash+Bandicoot", desc:"Plataforma clássico." },
+  { title:"Batman™: Arkham Origins", image:"https://via.placeholder.com/200x300?text=Batman+Arkham+Origins", desc:"Ação com Batman." },
+  { title:"Red Dead Redemption", image:"https://via.placeholder.com/200x300?text=RDR", desc:"Velho Oeste." },
+  { title:"DARK SOULS™ III", image:"https://via.placeholder.com/200x300?text=Dark+Souls+3", desc:"Aventura sombria." },
+  { title:"DARK SOULS™ REMASTERED", image:"https://via.placeholder.com/200x300?text=Dark+Souls+Remastered", desc:"Aventura sombria remasterizada." },
+  { title:"DARK SOULS™ II: Scholar of the First Sin", image:"https://via.placeholder.com/200x300?text=Dark+Souls+2+Scholar", desc:"Aventura sombria melhorada." },
+  { title:"DARK SOULS™ II", image:"https://via.placeholder.com/200x300?text=Dark+Souls+2", desc:"Aventura sombria." },
+  { title:"DRAGON BALL Z: KAKAROT", image:"https://via.placeholder.com/200x300?text=DBZ+Kakarot", desc:"Ação Dragon Ball." },
+  { title:"DRAGON BALL XENOVERSE 2", image:"https://via.placeholder.com/200x300?text=DBX2", desc:"Luta Dragon Ball." },
+  { title:"DRAGON BALL: Sparking! ZERO", image:"https://via.placeholder.com/200x300?text=DB+Sparking", desc:"Luta clássica." },
+  { title:"NARUTO SHIPPUDEN: Ultimate Ninja STORM", image:"https://via.placeholder.com/200x300?text=Naruto+Storm", desc:"Luta ninja." },
+  { title:"NARUTO: Ultimate Ninja STORM", image:"https://via.placeholder.com/200x300?text=Naruto+Storm+2", desc:"Luta ninja." }
+];
+
+// Banner com o primeiro jogo
+let featuredGame = games[0];
+document.getElementById("banner").style.backgroundImage = `url(${featuredGame.image})`;
+document.getElementById("bannerTitle").innerText = featuredGame.title;
+document.getElementById("bannerDesc").innerText = featuredGame.desc;
+
+// Cria as capas
+const gameRow = document.getElementById("gameRow");
+games.forEach(game => {
+    const poster = document.createElement("div");
+    poster.className = "poster";
+    poster.style.backgroundImage = `url(${game.image})`;
+    poster.addEventListener("click", () => {
+        document.getElementById("modal").style.display="flex";
+        document.getElementById("gameTitle").innerText = game.title;
+        document.getElementById("gameDescription").innerText = game.desc;
+    });
+    gameRow.appendChild(poster);
+});
+
+// Fecha modal
+function closeModal() {
+    document.getElementById("modal").style.display="none";
+}
+</script>
+
+</body>
+</html>
