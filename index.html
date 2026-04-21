@@ -1,297 +1,171 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BINGOOO</title>
-<style>
-:root{
-  --verde:#0D4D2A;
-  --verde-claro:#1A7A43;
-  --dourado:#FFD700;
-  --dourado-brilho:#FFEA80;
-  --bg:#031A0F;
-  --branco:#F8F8F8;
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{
-  background:radial-gradient(circle at top, var(--verde-claro), var(--bg));
-  color:var(--branco);
-  min-height:100vh;
-  padding:16px;
-}
-.container{max-width:500px;margin:0 auto}
-.header{
-  text-align:center;
-  margin-bottom:20px;
-  text-shadow:0 0 12px rgba(255,215,0,0.6);
-}
-.logo{
-  font-size:2rem;
-  font-weight:900;
-  color:var(--dourado);
-  letter-spacing:1px;
-}
-.logo span{color:var(--verde-claro)}
-.card{
-  background:rgba(13,77,42,0.4);
-  border:2px solid var(--dourado);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:16px;
-  box-shadow:0 0 20px rgba(255,215,0,0.2), inset 0 0 10px rgba(255,215,0,0.1);
-  backdrop-filter:blur(8px);
-}
-.btn{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:12px;
-  background:linear-gradient(180deg,var(--dourado),#B8860B);
-  color:var(--bg);
-  font-weight:800;
-  font-size:1.1rem;
-  box-shadow:0 4px 0 #8B6914, 0 0 15px rgba(255,215,0,0.5);
-  transition:all .1s;
-  cursor:pointer;
-}
-.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #8B6914}
-.btn-sortear{background:linear-gradient(180deg, #1A7A43, #0D4D2A); color:white; border: 1px solid var(--dourado); box-shadow: 0 4px 0 #052614;}
-.input{
-  width:100%;
-  padding:12px;
-  border:2px solid var(--dourado);
-  border-radius:12px;
-  background:rgba(0,0,0,0.3);
-  color:var(--branco);
-  font-size:1rem;
-  margin-bottom:12px;
-}
-.numero-sorteado{
-  font-size:4.5rem;
-  font-weight:900;
-  text-align:center;
-  color:var(--dourado);
-  text-shadow:0 0 20px var(--dourado);
-  margin:10px 0;
-  height:90px;
-  animation: pulo 0.5s ease;
-}
-@keyframes pulo {
-  0% {transform: scale(0.5);}
-  80% {transform: scale(1.1);}
-  100% {transform: scale(1);}
-}
-.numeros-sorteados{
-  display:flex;
-  flex-wrap:wrap-reverse;
-  gap:6px;
-  margin-top:16px;
-  justify-content: center;
-}
-.bolinha{
-  width:35px;height:35px;
-  background:var(--dourado);
-  color:var(--bg);
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  font-size:.9rem;
-  animation: bolinhaIn 0.3s ease-out;
-}
-@keyframes bolinhaIn { from{transform:translateY(20px); opacity:0} to{transform:translateY(0); opacity:1}}
-.cartela{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:6px;
-  margin-bottom:16px;
-}
-.celula{
-  aspect-ratio:1;
-  background:rgba(0,0,0,0.5);
-  border:1px solid rgba(255,215,0,0.3);
-  border-radius:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  font-size:1.1rem;
-  cursor:pointer;
-}
-.celula.marcado{
-  background:var(--dourado);
-  color:var(--bg);
-  box-shadow:0 0 15px var(--dourado);
-}
-.celula.coringa{ background:var(--verde-claro); color:var(--dourado); border-color: var(--dourado); }
-.header-cartela{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:6px;
-  margin-bottom:6px;
-}
-.header-cartela div{
-  text-align:center;
-  color:var(--dourado);
-  font-weight:900;
-  font-size:1.3rem;
-}
-.fichas{ text-align:center; font-size:1.2rem; margin-bottom:12px; }
-.fichas span{color:var(--dourado);font-weight:800}
-.hide{display:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEFLIX BINGO | PRO SELECTION</title>
+    <style>
+        :root {
+            --bg-dark: #020202;
+            --neon-red: #ff0000;
+            --gold: #d4af37;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #bg-image {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            background-image: url('https://casinoespana.club/wp-content/uploads/2024/02/bonos_de_bingo_banner.webp'); 
+            filter: blur(12px) brightness(0.3);
+        }
+
+        #lobby {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-title { font-size: 4rem; font-weight: 900; margin-bottom: 40px; color: var(--white); }
+        .hero-title span { color: var(--neon-red); text-shadow: 0 0 15px var(--neon-red); }
+
+        .selection-container {
+            display: flex;
+            gap: 20px; /* Reduzi um pouco o espaço para caber as 4 opções na tela */
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card-option {
+            background: rgba(15, 15, 15, 0.9);
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 20px;
+            width: 220px; /* Ajuste leve na largura para melhor encaixe */
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 230px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card-option:hover {
+            border-color: var(--neon-red);
+            transform: translateY(-12px);
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.5);
+            background: rgba(30, 0, 0, 0.4);
+        }
+
+        .card-option:hover img {
+            transform: scale(1.1);
+        }
+
+        .card-label {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-sublabel {
+            font-size: 0.75rem;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        footer { text-align: center; padding: 15px; background: #000; font-size: 12px; color: #444; border-top: 1px solid #111; }
+        footer b { color: var(--gold); }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="logo">BINGO DA <span>SORTE</span> 🍀</div>
-    <small>Bingo de Elite</small>
-  </div>
 
-  <div id="tela-inicio" class="card">
-    <input id="nome" class="input" placeholder="Seu Nome de Jogador">
-    <button class="btn" onclick="iniciarJogo()">INICIAR NOVA PARTIDA</button>
-  </div>
+    <div id="bg-image"></div>
 
-  <div id="tela-jogo" class="hide">
-    <div class="card">
-      <div class="fichas">Saldo: <span id="mostra-fichas">1000</span> 🪙</div>
-      <button class="btn btn-sortear" id="btn-sortear" onclick="sortearNumero()">SORTEAR PRÓXIMO</button>
-    </div>
-
-    <div class="card">
-      <div class="numero-sorteado" id="numero-atual">--</div>
-      <div class="numeros-sorteados" id="lista-sorteados"></div>
-    </div>
-
-    <div class="card">
-      <div class="header-cartela"><div>B</div><div>I</div><div>N</div><div>G</div><div>O</div></div>
-      <div class="cartela" id="minha-cartela"></div>
-      <button class="btn" onclick="verificarBingo()">GRITAR BINGO!</button>
-    </div>
-  </div>
-</div>
-
-<script>
-let sorteados = [];
-let fichas = parseInt(localStorage.getItem('fichas')) || 1000;
-let matrizCartela = [];
-
-function iniciarJogo() {
-    const nome = document.getElementById('nome').value || 'Jogador';
-    document.getElementById('tela-inicio').classList.add('hide');
-    document.getElementById('tela-jogo').classList.remove('hide');
-    document.getElementById('mostra-fichas').textContent = fichas;
-    gerarCartela();
-}
-
-function gerarCartela() {
-    const colunas = {B:[],I:[],N:[],G:[],O:[]};
-    const ranges = {B:[1,15],I:[16,30],N:[31,45],G:[46,60],O:[61,75]};
-    
-    for(let letra in ranges){
-        let [min,max] = ranges[letra];
-        while(colunas[letra].length < 5){
-            let num = Math.floor(Math.random()*(max-min+1))+min;
-            if(!colunas[letra].includes(num)) colunas[letra].push(num);
-        }
-    }
-    colunas.N[2] = 'FREE';
-    
-    matrizCartela = [];
-    const cartelaDiv = document.getElementById('minha-cartela');
-    cartelaDiv.innerHTML = '';
-
-    for(let i=0; i<5; i++) {
-        let linha = [colunas.B[i], colunas.I[i], colunas.N[i], colunas.G[i], colunas.O[i]];
-        matrizCartela.push(linha);
+    <div id="lobby">
+        <h1 class="hero-title">DIONATAN<span>GAY</span> BINGO</h1>
         
-        linha.forEach((num, j) => {
-            const cel = document.createElement('div');
-            cel.className = 'celula';
-            cel.textContent = num;
-            cel.id = `cel-${i}-${j}`;
-            if(num === 'FREE') cel.classList.add('marcado', 'coringa');
-            cel.onclick = () => marcar(cel, num);
-            cartelaDiv.appendChild(cel);
-        });
-    }
-}
+        <div class="selection-container">
+            <div class="card-option" onclick="startGame(1)">
+                <div class="card-img-wrapper">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731709/ChatGPT_Image_20_de_abr._de_2026_21_28_36_psllzv.png" alt="1 Cartela">
+                </div>
+                <div>
+                    <div class="card-label">1 Cartela</div>
+                    <div class="card-sublabel">Iniciante</div>
+                </div>
+            </div>
 
-function marcar(cel, num) {
-    if(num === 'FREE') return;
-    if(sorteados.includes(parseInt(num))) {
-        cel.classList.toggle('marcado');
-    } else {
-        alert('Este número ainda não foi cantado!');
-    }
-}
+            <div class="card-option" onclick="startGame(2)">
+                <div class="card-img-wrapper">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731702/ChatGPT_Image_20_de_abr._de_2026_21_31_03_kbenai.png" alt="2 Cartelas">
+                </div>
+                <div>
+                    <div class="card-label">2 Cartelas</div>
+                    <div class="card-sublabel">Avançado</div>
+                </div>
+            </div>
 
-function sortearNumero() {
-    if(sorteados.length >= 75) return alert('Fim de jogo! Todos os números sorteados.');
-    
-    let num;
-    do { num = Math.floor(Math.random() * 75) + 1; } while(sorteados.includes(num));
-    
-    sorteados.push(num);
-    
-    let letra = num <= 15 ? "B" : num <= 30 ? "I" : num <= 45 ? "N" : num <= 60 ? "G" : "O";
-    
-    const display = document.getElementById('numero-atual');
-    display.textContent = `${letra} ${num}`;
-    display.style.animation = 'none';
-    setTimeout(() => display.style.animation = 'pulo 0.5s ease', 10);
+            <div class="card-option" onclick="startGame(3)">
+                <div class="card-img-wrapper">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731713/ChatGPT_Image_20_de_abr._de_2026_21_28_36_-_Copia_2_lxl5xh.png" alt="3 Cartelas">
+                </div>
+                <div>
+                    <div class="card-label">3 Cartelas</div>
+                    <div class="card-sublabel">Modo Tubarão</div>
+                </div>
+            </div>
 
-    const bola = document.createElement('div');
-    bola.className = 'bolinha';
-    bola.textContent = num;
-    document.getElementById('lista-sorteados').prepend(bola);
+            <div class="card-option" onclick="startGame(4)">
+                <div class="card-img-wrapper">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731704/ChatGPT_Image_20_de_abr._de_2026_21_26_35_bmgshy.png" alt="4 Cartelas">
+                </div>
+                <div>
+                    <div class="card-label">4 Cartelas</div>
+                    <div class="card-sublabel">Modo Lenda</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    if('speechSynthesis' in window) {
-        speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(`${letra}... ${num}`);
-        msg.lang = 'pt-BR';
-        speechSynthesis.speak(msg);
-    }
-}
+    <footer>Desenvolvido por <b>Yan Ferreira - GAMEFLIX</b> &copy; 2026.</footer>
 
-function verificarBingo() {
-    let ganhou = false;
-    const celulas = [];
-    
-    // Mapeia o estado da cartela (true para marcado)
-    for(let i=0; i<5; i++) {
-        celulas[i] = [];
-        for(let j=0; j<5; j++) {
-            celulas[i][j] = document.getElementById(`cel-${i}-${j}`).classList.contains('marcado');
+    <script>
+        function startGame(num) {
+            alert("Iniciando arena para " + num + " cartelas...");
         }
-    }
-
-    // Checar Linhas e Colunas
-    for(let i=0; i<5; i++) {
-        if(celulas[i].every(c => c)) ganhou = true; // Linha
-        if([celulas[0][i], celulas[1][i], celulas[2][i], celulas[3][i], celulas[4][i]].every(c => c)) ganhou = true; // Coluna
-    }
-
-    // Diagonais
-    if([celulas[0][0], celulas[1][1], celulas[2][2], celulas[3][3], celulas[4][4]].every(c => c)) ganhou = true;
-    if([celulas[0][4], celulas[1][3], celulas[2][2], celulas[3][1], celulas[4][0]].every(c => c)) ganhou = true;
-
-    if(ganhou) {
-        fichas += 500;
-        localStorage.setItem('fichas', fichas);
-        document.getElementById('mostra-fichas').textContent = fichas;
-        alert('🎉 BINGO! Você ganhou 500 fichas!');
-        location.reload(); // Reinicia para nova rodada
-    } else {
-        fichas -= 50;
-        localStorage.setItem('fichas', fichas);
-        document.getElementById('mostra-fichas').textContent = fichas;
-        alert('❌ Cartela incompleta! Você perdeu 50 fichas.');
-    }
-}
-</script>
+    </script>
 </body>
 </html>
