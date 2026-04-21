@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMEFLIX BINGO | PRO SELECTION</title>
+    <title>GAMEFLIX BINGO | MOBILE GRID</title>
     <style>
         :root {
             --bg-dark: #020202;
@@ -19,11 +19,11 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Evita scroll lateral */
+            overflow-x: hidden;
         }
 
         #bg-image {
-            position: fixed; /* Fixed para não sumir no scroll do mobile */
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             background-size: cover;
@@ -39,112 +39,91 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px 20px;
+            padding: 20px 10px; /* Reduzi o padding para ganhar espaço */
         }
 
         .hero-title { 
-            font-size: 3rem; /* Reduzido para mobile */
+            font-size: 2.5rem; 
             font-weight: 900; 
-            margin-bottom: 30px; 
+            margin-bottom: 25px; 
             color: var(--white);
             text-transform: uppercase;
         }
         .hero-title span { color: var(--neon-red); text-shadow: 0 0 15px var(--neon-red); }
 
+        /* AJUSTE DO CONTAINER PARA GRID */
         .selection-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap; /* Essencial para quebrar linha no mobile */
-            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* FORÇA 2 COLUNAS SEMPRE */
+            gap: 10px; /* Espaço menor entre os cards no mobile */
+            width: 100%;
+            max-width: 900px;
         }
 
         .card-option {
             background: rgba(15, 15, 15, 0.9);
             border: 2px solid #333;
-            border-radius: 20px;
-            padding: 20px;
-            width: 220px; 
+            border-radius: 15px;
+            padding: 10px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .card-img-wrapper {
             width: 100%;
-            height: 230px;
-            border-radius: 12px;
+            height: 140px; /* Altura reduzida para caber no grid 2x2 do mobile */
+            border-radius: 10px;
             overflow: hidden;
             border: 1px solid var(--gold);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
         }
 
         .card-img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
 
-        /* --- AJUSTES MOBILE (A MÁGICA ACONTECE AQUI) --- */
-        @media (max-width: 768px) {
-            body { overflow-y: auto; } /* Permite scroll vertical se os cards ocuparem muito espaço */
-            
-            .hero-title {
-                font-size: 2.2rem; /* Título menor em telemóveis */
-                margin-bottom: 20px;
-            }
-
-            .card-option {
-                width: 100%; /* Card ocupa a largura quase toda no mobile */
-                max-width: 300px;
-                flex-direction: row; /* Coloca imagem ao lado do texto se preferir, ou manter column */
-                flex-direction: column; 
-            }
-
-            .card-img-wrapper {
-                height: 180px; /* Imagem um pouco menor no mobile para caber mais itens */
-            }
-
+        /* --- AJUSTES ESPECÍFICOS PARA PC --- */
+        @media (min-width: 769px) {
             .selection-container {
-                gap: 15px;
+                grid-template-columns: repeat(4, 1fr); /* No PC ficam as 4 lado a lado */
+                gap: 20px;
             }
+            .card-img-wrapper { height: 230px; }
+            .hero-title { font-size: 4rem; }
         }
 
-        .card-option:hover {
+        /* EFEITO AO TOCAR/PASSAR O MOUSE */
+        .card-option:active, .card-option:hover {
             border-color: var(--neon-red);
-            transform: translateY(-8px);
-            box-shadow: 0 0 35px rgba(255, 0, 0, 0.5);
-            background: rgba(30, 0, 0, 0.4);
+            transform: scale(0.98);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
         }
-
-        .card-option:hover img { transform: scale(1.1); }
 
         .card-label {
-            font-size: 1.2rem;
+            font-size: 0.9rem; /* Texto menor para caber no grid */
             font-weight: 800;
             color: var(--white);
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .card-sublabel {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: var(--gold);
             text-transform: uppercase;
         }
 
         footer { 
             text-align: center; 
-            padding: 15px; 
+            padding: 10px; 
             background: rgba(0,0,0,0.9); 
-            font-size: 12px; 
+            font-size: 10px; 
             color: #444; 
             border-top: 1px solid #111;
-            margin-top: auto; 
         }
         footer b { color: var(--gold); }
     </style>
@@ -159,7 +138,7 @@
         <div class="selection-container">
             <div class="card-option" onclick="startGame(1)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731709/ChatGPT_Image_20_de_abr._de_2026_21_28_36_psllzv.png" alt="1 Cartela">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731709/ChatGPT_Image_20_de_abr._de_2026_21_28_36_psllzv.png">
                 </div>
                 <div>
                     <div class="card-label">1 Cartela</div>
@@ -169,7 +148,7 @@
 
             <div class="card-option" onclick="startGame(2)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731702/ChatGPT_Image_20_de_abr._de_2026_21_31_03_kbenai.png" alt="2 Cartelas">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731702/ChatGPT_Image_20_de_abr._de_2026_21_31_03_kbenai.png">
                 </div>
                 <div>
                     <div class="card-label">2 Cartelas</div>
@@ -179,31 +158,31 @@
 
             <div class="card-option" onclick="startGame(3)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731713/ChatGPT_Image_20_de_abr._de_2026_21_28_36_-_Copia_2_lxl5xh.png" alt="3 Cartelas">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731713/ChatGPT_Image_20_de_abr._de_2026_21_28_36_-_Copia_2_lxl5xh.png">
                 </div>
                 <div>
                     <div class="card-label">3 Cartelas</div>
-                    <div class="card-sublabel">Modo Tubarão</div>
+                    <div class="card-sublabel">Tubarão</div>
                 </div>
             </div>
 
             <div class="card-option" onclick="startGame(4)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731704/ChatGPT_Image_20_de_abr._de_2026_21_26_35_bmgshy.png" alt="4 Cartelas">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731704/ChatGPT_Image_20_de_abr._de_2026_21_26_35_bmgshy.png">
                 </div>
                 <div>
                     <div class="card-label">4 Cartelas</div>
-                    <div class="card-sublabel">Modo Lenda</div>
+                    <div class="card-sublabel">Lenda</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>Desenvolvido por <b>Yan Ferreira - GAMEFLIX</b> &copy; 2026.</footer>
+    <footer>Desenvolvido por <b>Yan Ferreira - GAMEFLIX</b></footer>
 
     <script>
         function startGame(num) {
-            alert("Iniciando arena para " + num + " cartelas...");
+            alert("Iniciando com " + num + " cartelas...");
         }
     </script>
 </body>
