@@ -16,14 +16,14 @@
 
         body {
             background-color: var(--bg-dark);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-x: hidden; /* Evita scroll lateral */
         }
 
         #bg-image {
-            position: absolute;
+            position: fixed; /* Fixed para não sumir no scroll do mobile */
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             background-size: cover;
@@ -39,16 +39,24 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            padding: 40px 20px;
         }
 
-        .hero-title { font-size: 4rem; font-weight: 900; margin-bottom: 40px; color: var(--white); }
+        .hero-title { 
+            font-size: 3rem; /* Reduzido para mobile */
+            font-weight: 900; 
+            margin-bottom: 30px; 
+            color: var(--white);
+            text-transform: uppercase;
+        }
         .hero-title span { color: var(--neon-red); text-shadow: 0 0 15px var(--neon-red); }
 
         .selection-container {
             display: flex;
-            gap: 20px; /* Reduzi um pouco o espaço para caber as 4 opções na tela */
+            gap: 20px;
             justify-content: center;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Essencial para quebrar linha no mobile */
+            max-width: 1200px;
         }
 
         .card-option {
@@ -56,7 +64,7 @@
             border: 2px solid #333;
             border-radius: 20px;
             padding: 20px;
-            width: 220px; /* Ajuste leve na largura para melhor encaixe */
+            width: 220px; 
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
@@ -81,16 +89,39 @@
             transition: transform 0.5s ease;
         }
 
+        /* --- AJUSTES MOBILE (A MÁGICA ACONTECE AQUI) --- */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; } /* Permite scroll vertical se os cards ocuparem muito espaço */
+            
+            .hero-title {
+                font-size: 2.2rem; /* Título menor em telemóveis */
+                margin-bottom: 20px;
+            }
+
+            .card-option {
+                width: 100%; /* Card ocupa a largura quase toda no mobile */
+                max-width: 300px;
+                flex-direction: row; /* Coloca imagem ao lado do texto se preferir, ou manter column */
+                flex-direction: column; 
+            }
+
+            .card-img-wrapper {
+                height: 180px; /* Imagem um pouco menor no mobile para caber mais itens */
+            }
+
+            .selection-container {
+                gap: 15px;
+            }
+        }
+
         .card-option:hover {
             border-color: var(--neon-red);
-            transform: translateY(-12px);
+            transform: translateY(-8px);
             box-shadow: 0 0 35px rgba(255, 0, 0, 0.5);
             background: rgba(30, 0, 0, 0.4);
         }
 
-        .card-option:hover img {
-            transform: scale(1.1);
-        }
+        .card-option:hover img { transform: scale(1.1); }
 
         .card-label {
             font-size: 1.2rem;
@@ -106,7 +137,15 @@
             text-transform: uppercase;
         }
 
-        footer { text-align: center; padding: 15px; background: #000; font-size: 12px; color: #444; border-top: 1px solid #111; }
+        footer { 
+            text-align: center; 
+            padding: 15px; 
+            background: rgba(0,0,0,0.9); 
+            font-size: 12px; 
+            color: #444; 
+            border-top: 1px solid #111;
+            margin-top: auto; 
+        }
         footer b { color: var(--gold); }
     </style>
 </head>
@@ -115,7 +154,7 @@
     <div id="bg-image"></div>
 
     <div id="lobby">
-        <h1 class="hero-title">DIONATAN<span>GAY</span> BINGO</h1>
+        <h1 class="hero-title">GAME<span>FLIX</span> BINGO</h1>
         
         <div class="selection-container">
             <div class="card-option" onclick="startGame(1)">
