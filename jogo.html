@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMEFLIX | ARENA BINGO</title>
+    <title>GAMEFLIX | ARENA AO VIVO</title>
     <style>
         :root { 
             --bg-dark: #020202; 
@@ -26,7 +26,6 @@
             background-image: radial-gradient(circle at center, #1a0000 0%, #020202 100%);
         }
 
-        /* HEADER */
         .game-header {
             width: 100%;
             padding: 20px;
@@ -44,7 +43,6 @@
         .logo-mini { font-weight: 900; font-size: 1.8rem; letter-spacing: 2px; }
         .logo-mini span { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
 
-        /* PAINEL DE SORTEIO DINÂMICO */
         .draw-panel {
             margin: 30px 0;
             text-align: center;
@@ -55,7 +53,6 @@
             width: 90%;
             max-width: 600px;
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
-            position: relative;
         }
 
         .current-ball {
@@ -70,19 +67,16 @@
             color: #000;
             font-weight: 900;
             margin: 15px auto;
-            box-shadow: 0 0 30px var(--gold), inset -5px -5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 0 30px var(--gold);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 20px var(--gold); }
-            50% { transform: scale(1.05); box-shadow: 0 0 40px var(--gold); }
-            100% { transform: scale(1); box-shadow: 0 0 20px var(--gold); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        .ball-count { color: var(--gold); font-size: 0.8rem; font-weight: bold; }
-
-        /* ÁREA DAS CARTELAS */
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -90,6 +84,7 @@
             width: 95%;
             max-width: 1300px;
             padding: 20px;
+            margin-bottom: 100px;
         }
 
         .bingo-card {
@@ -98,18 +93,9 @@
             border-radius: 20px;
             padding: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
         }
 
-        .card-header { 
-            color: var(--gold); 
-            font-weight: 900; 
-            margin-bottom: 15px; 
-            font-size: 1rem;
-            text-transform: uppercase;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
+        .card-header { color: var(--gold); font-weight: 900; margin-bottom: 15px; border-bottom: 1px solid #333; }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
 
@@ -122,133 +108,107 @@
             font-weight: 800;
             font-size: 1.3rem;
             border-radius: 10px;
-            cursor: pointer;
             border: 1px solid #333;
-            transition: 0.3s;
             color: #ccc;
+            transition: 0.3s;
         }
 
         .cell.marked {
-            background: linear-gradient(145deg, #ff0000, #800000);
+            background: linear-gradient(145deg, var(--neon-red), #800000);
             color: white;
-            border-color: #ff4d4d;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            border-color: #fff;
+            box-shadow: 0 0 15px var(--neon-red);
             transform: scale(0.95);
         }
 
         .cell.free { background: var(--gold); color: #000; font-size: 0.7rem; }
 
-        /* CONTROLES */
-        .controls { 
-            position: fixed;
-            bottom: 30px;
-            display: flex;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .btn-action {
-            padding: 18px 45px;
-            border: none;
-            color: white;
-            font-weight: 900;
-            border-radius: 50px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.4s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .btn-start { background: linear-gradient(to right, #ff0000, #b30000); }
-        .btn-stop { background: #333; }
-
-        .btn-action:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255, 0, 0, 0.4); }
-
         #history-bar {
             width: 100%;
             overflow-x: auto;
             white-space: nowrap;
-            padding: 10px;
+            padding: 15px;
             background: #000;
             border-top: 1px solid var(--gold);
-            margin-top: 20px;
         }
         
         .history-ball {
             display: inline-flex;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             background: #222;
             border: 1px solid var(--gold);
             border-radius: 50%;
             margin: 0 5px;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
             color: var(--gold);
+            font-weight: bold;
         }
 
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0f0;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .dot { width: 8px; height: 8px; background: #0f0; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
 
     <div class="game-header">
         <div class="logo-mini">GAME<span>FLIX</span></div>
-        <div id="status" style="color: var(--gold); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Sorteio Pausado</div>
+        <div class="live-indicator"><div class="dot"></div> AO VIVO</div>
     </div>
 
     <div class="draw-panel">
-        <div class="ball-count">BOLAS SORTEADAS: <span id="count">0</span>/75</div>
+        <div id="next-draw" style="font-size: 0.8rem; color: var(--gold);">PRÓXIMA BOLA EM: <span id="timer">--</span>s</div>
         <div class="current-ball" id="ball">-</div>
-        <div id="ball-name" style="color: var(--gold); font-weight: bold; min-height: 1.2rem;"></div>
+        <div id="status-msg" style="font-weight: bold; color: var(--gold);">Sincronizando...</div>
     </div>
 
-    <div id="history-bar">
-        </div>
+    <div id="history-bar"></div>
 
     <div class="cards-container" id="cards-container"></div>
-
-    <div class="controls">
-        <button id="btnAuto" class="btn-action btn-start" onclick="toggleAuto()">Iniciar Auto</button>
-    </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const qtd = parseInt(urlParams.get('qtd')) || 1;
         const container = document.getElementById('cards-container');
         let drawnBalls = [];
-        let autoInterval = null;
+        let lastBall = null;
 
-        // Iniciar cartelas
+        // Gerar cartelas (Semente fixa por dia para garantir que não mude no F5)
         for(let i = 1; i <= qtd; i++) createCard(i);
 
         function createCard(id) {
             const card = document.createElement('div');
             card.className = 'bingo-card';
-            card.innerHTML = `<div class="card-header">Cartela Oficial #${id}</div>`;
+            card.innerHTML = `<div class="card-header">Cartela #${id}</div>`;
             const grid = document.createElement('div');
             grid.className = 'grid';
             
-            // Números oficiais de Bingo (B=1-15, I=16-30, etc)
+            // Lógica B-I-N-G-O Real
             let cardNums = [];
             for(let col=0; col<5; col++) {
-                let start = col * 15 + 1;
-                let colNums = Array.from({length: 15}, (_, i) => i + start)
-                                   .sort(() => Math.random() - 0.5)
-                                   .slice(0, 5);
+                let start = (col * 15) + 1;
+                let colNums = Array.from({length: 15}, (_, i) => i + start).sort(() => Math.random() - 0.5).slice(0, 5);
                 cardNums.push(...colNums);
             }
             
             cardNums.forEach((num, index) => {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
+                cell.setAttribute('data-num', num);
                 if(index === 12) {
                     cell.innerText = "FREE";
                     cell.classList.add('free', 'marked');
                 } else {
                     cell.innerText = num;
-                    cell.onclick = () => cell.classList.toggle('marked');
                 }
                 grid.appendChild(cell);
             });
@@ -256,60 +216,71 @@
             container.appendChild(card);
         }
 
-        function speak(text) {
-            const msg = new SpeechSynthesisUtterance();
-            msg.text = text;
-            msg.rate = 0.9; // Velocidade da voz
-            msg.pitch = 1;
-            msg.lang = 'pt-BR';
-            window.speechSynthesis.speak(msg);
+        // --- LÓGICA AO VIVO (SINCRONIA POR TEMPO) ---
+        function updateLiveGame() {
+            const now = new Date();
+            const secondsInDay = Math.floor(now.getTime() / 1000);
+            const interval = 7; // Nova bola a cada 7 segundos
+            const gameCycle = 75 * interval; 
+            
+            // Gera a sequência de bolas do dia baseada no tempo
+            const seed = Math.floor(secondsInDay / gameCycle);
+            let allBalls = Array.from({length: 75}, (_, i) => i + 1);
+            
+            // Shuffle determinístico
+            let currentBallsOrder = shuffleWithSeed(allBalls, seed);
+            
+            const currentStep = Math.floor((secondsInDay % gameCycle) / interval);
+            const timeLeft = interval - (secondsInDay % interval);
+            
+            document.getElementById('timer').innerText = timeLeft;
+
+            drawnBalls = currentBallsOrder.slice(0, currentStep + 1);
+            let currentBall = drawnBalls[drawnBalls.length - 1];
+
+            if(currentBall !== lastBall) {
+                lastBall = currentBall;
+                renderGame(currentBall);
+            }
         }
 
-        function drawBall() {
-            if(drawnBalls.length >= 75) {
-                toggleAuto();
-                return alert("Bingo Completo!");
+        function shuffleWithSeed(array, seed) {
+            let m = array.length, t, i;
+            while (m) {
+                i = Math.floor(Math.abs(Math.sin(seed++)) * m--);
+                t = array[m];
+                array[m] = array[i];
+                array[i] = t;
             }
-            
-            let ball;
-            do { ball = Math.floor(Math.random() * 75) + 1; } while(drawnBalls.includes(ball));
+            return array;
+        }
 
-            drawnBalls.push(ball);
-            
-            // Atualiza UI
-            const ballEl = document.getElementById('ball');
-            ballEl.innerText = ball;
-            document.getElementById('count').innerText = drawnBalls.length;
+        function renderGame(ball) {
+            document.getElementById('ball').innerText = ball;
+            document.getElementById('status-msg').innerText = "BOLA SORTEADA!";
             
             // Voz
-            speak("Número " + ball);
+            const msg = new SpeechSynthesisUtterance("Número " + ball);
+            msg.lang = 'pt-BR';
+            window.speechSynthesis.speak(msg);
 
-            // Histórico
+            // Auto-Paque (Marca em todas as cartelas)
+            document.querySelectorAll(`.cell[data-num="${ball}"]`).forEach(el => {
+                el.classList.add('marked');
+            });
+
+            // Atualiza Histórico
             const hist = document.getElementById('history-bar');
-            const hBall = document.createElement('div');
-            hBall.className = 'history-ball';
-            hBall.innerText = ball;
-            hist.prepend(hBall);
+            hist.innerHTML = '';
+            drawnBalls.slice().reverse().forEach(b => {
+                const h = document.createElement('div');
+                h.className = 'history-ball';
+                h.innerText = b;
+                hist.appendChild(h);
+            });
         }
 
-        function toggleAuto() {
-            const btn = document.getElementById('btnAuto');
-            const status = document.getElementById('status');
-
-            if(autoInterval) {
-                clearInterval(autoInterval);
-                autoInterval = null;
-                btn.innerText = "Iniciar Auto";
-                btn.classList.replace('btn-stop', 'btn-start');
-                status.innerText = "Sorteio Pausado";
-            } else {
-                drawBall(); // Primeira bola imediata
-                autoInterval = setInterval(drawBall, 4000); // Sorteia a cada 4 segundos
-                btn.innerText = "Pausar Auto";
-                btn.classList.replace('btn-start', 'btn-stop');
-                status.innerText = "Sorteio Ativo";
-            }
-        }
+        setInterval(updateLiveGame, 1000);
     </script>
 </body>
 </html>
