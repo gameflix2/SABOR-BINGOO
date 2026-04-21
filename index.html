@@ -16,14 +16,14 @@
 
         body {
             background-color: var(--bg-dark);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         #bg-image {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             background-size: cover;
@@ -39,79 +39,94 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10px;
+            padding: 20px 15px;
         }
 
-        .hero-title { font-size: 2rem; font-weight: 900; margin-bottom: 20px; color: var(--white); }
+        .hero-title { 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            margin-bottom: 30px; 
+            color: var(--white);
+            text-transform: uppercase;
+        }
         .hero-title span { color: var(--neon-red); text-shadow: 0 0 15px var(--neon-red); }
 
+        /* CONTAINER AJUSTADO PARA 2 COLUNAS */
         .selection-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 na mesma linha */
-            gap: 8px;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px;
             width: 100%;
-            max-width: 1200px;
-            padding: 0 5px;
+            max-width: 1000px;
         }
 
         .card-option {
             background: rgba(15, 15, 15, 0.9);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 10px 5px;
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 15px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            /* Proporção vertical mantida */
-            min-height: 180px; 
+            gap: 15px;
         }
 
+        /* PROPORÇÃO DE PC APLICADA */
         .card-img-wrapper {
             width: 100%;
-            height: 110px; /* Altura fixa para manter o card "esticado" */
-            border-radius: 8px;
+            height: 230px; 
+            border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
             background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .card-img-wrapper img {
-            max-width: 100%;
-            max-height: 100%;
-            /* 'contain' garante que a foto apareça inteira sem cortes */
-            object-fit: contain; 
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Mantém o preenchimento total como no PC */
             transition: transform 0.5s ease;
         }
 
-        @media (min-width: 769px) {
+        /* AJUSTE PARA TELAS DE PC (4 LADO A LADO) */
+        @media (min-width: 992px) {
+            .selection-container {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
             .hero-title { font-size: 4rem; }
-            .card-img-wrapper { height: 230px; }
-            .card-option { padding: 20px; min-height: 350px; border-width: 2px; }
-            .selection-container { gap: 20px; }
-            .card-label { font-size: 1.2rem; }
         }
 
-        .card-option:active {
+        .card-option:hover, .card-option:active {
             border-color: var(--neon-red);
-            transform: scale(0.95);
+            transform: translateY(-8px);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            background: rgba(30, 0, 0, 0.4);
+        }
+
+        .card-option:hover img {
+            transform: scale(1.1);
         }
 
         .card-label {
-            font-size: 0.6rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--white);
             text-transform: uppercase;
-            margin-top: 5px;
-            line-height: 1;
+            letter-spacing: 1px;
         }
 
-        footer { text-align: center; padding: 10px; background: #000; font-size: 10px; color: #444; }
+        footer { 
+            text-align: center; 
+            padding: 15px; 
+            background: #000; 
+            font-size: 12px; 
+            color: #444; 
+            border-top: 1px solid #111;
+        }
         footer b { color: var(--gold); }
     </style>
 </head>
@@ -120,33 +135,33 @@
     <div id="bg-image"></div>
 
     <div id="lobby">
-        <h1 class="hero-title">DIONATAN<span>GAY</span> BINGO</h1>
+        <h1 class="hero-title">GAME<span>FLIX</span> BINGO</h1>
         
         <div class="selection-container">
             <div class="card-option" onclick="startGame(1)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731709/ChatGPT_Image_20_de_abr._de_2026_21_28_36_psllzv.png">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731709/ChatGPT_Image_20_de_abr._de_2026_21_28_36_psllzv.png" alt="1 Cartela">
                 </div>
                 <div class="card-label">1 Cartela</div>
             </div>
 
             <div class="card-option" onclick="startGame(2)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731702/ChatGPT_Image_20_de_abr._de_2026_21_31_03_kbenai.png">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731702/ChatGPT_Image_20_de_abr._de_2026_21_31_03_kbenai.png" alt="2 Cartelas">
                 </div>
                 <div class="card-label">2 Cartelas</div>
             </div>
 
             <div class="card-option" onclick="startGame(3)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731713/ChatGPT_Image_20_de_abr._de_2026_21_28_36_-_Copia_2_lxl5xh.png">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731713/ChatGPT_Image_20_de_abr._de_2026_21_28_36_-_Copia_2_lxl5xh.png" alt="3 Cartelas">
                 </div>
                 <div class="card-label">3 Cartelas</div>
             </div>
 
             <div class="card-option" onclick="startGame(4)">
                 <div class="card-img-wrapper">
-                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731704/ChatGPT_Image_20_de_abr._de_2026_21_26_35_bmgshy.png">
+                    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731704/ChatGPT_Image_20_de_abr._de_2026_21_26_35_bmgshy.png" alt="4 Cartelas">
                 </div>
                 <div class="card-label">4 Cartelas</div>
             </div>
