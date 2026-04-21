@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEFLIX | LOGIN</title>
+    <style>
+        :root { --bg-dark: #020202; --neon-red: #ff0000; --gold: #d4af37; --white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { background-color: var(--bg-dark); height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+        #bg-image { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
+            background-image: url('https://casinoespana.club/wp-content/uploads/2024/02/bonos_de_bingo_banner.webp'); 
+            background-size: cover; background-position: center; filter: blur(15px) brightness(0.2); 
+        }
+
+        .login-card {
+            background: rgba(15, 15, 15, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+        }
+
+        h1 { font-size: 2.5rem; color: white; margin-bottom: 5px; }
+        h1 span { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
+        .subtitle { color: var(--gold); font-size: 0.9rem; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
+
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { color: #888; font-size: 0.8rem; margin-left: 5px; }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            margin-top: 5px;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: var(--neon-red);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.4s;
+            margin-top: 10px;
+        }
+        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(255, 0, 0, 0.4); }
+    </style>
+</head>
+<body>
+    <div id="bg-image"></div>
+    <div class="login-card">
+        <h1>GAME<span>FLIX</span></h1>
+        <p class="subtitle">Acesso Restrito</p>
+        
+        <div class="input-group">
+            <label>USUÁRIO</label>
+            <input type="text" id="user" placeholder="Seu login">
+        </div>
+        
+        <div class="input-group">
+            <label>SENHA</label>
+            <input type="password" id="pass" placeholder="••••••••">
+        </div>
+        
+        <button class="btn-login" onclick="handleLogin()">Entrar na Arena</button>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const user = document.getElementById('user').value;
+            const pass = document.getElementById('pass').value;
+
+            if(user === "admin" && pass === "123") { // Exemplo simples de senha
+                window.location.href = "lobby.html";
+            } else if (user === "" || pass === "") {
+                alert("Preencha todos os campos!");
+            } else {
+                alert("Usuário ou senha incorretos!");
+            }
+        }
+    </script>
+</body>
+</html>

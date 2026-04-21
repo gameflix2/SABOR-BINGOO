@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEFLIX | ARENA BINGO</title>
+    <style>
+        :root { 
+            --bg-dark: #020202; 
+            --neon-red: #ff0000; 
+            --gold: #d4af37; 
+            --white: #ffffff; 
+            --card-bg: rgba(20, 20, 20, 0.95);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at center, #1a0000 0%, #020202 100%);
+        }
+
+        /* HEADER */
+        .game-header {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 2px solid var(--neon-red);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-mini { font-weight: 900; font-size: 1.8rem; letter-spacing: 2px; }
+        .logo-mini span { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
+
+        /* PAINEL DE SORTEIO DINÂMICO */
+        .draw-panel {
+            margin: 30px 0;
+            text-align: center;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 25px;
+            border: 2px solid var(--gold);
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
+            position: relative;
+        }
+
+        .current-ball {
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle at 30% 30%, #fff, var(--gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            color: #000;
+            font-weight: 900;
+            margin: 15px auto;
+            box-shadow: 0 0 30px var(--gold), inset -5px -5px 15px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px var(--gold); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px var(--gold); }
+            100% { transform: scale(1); box-shadow: 0 0 20px var(--gold); }
+        }
+
+        .ball-count { color: var(--gold); font-size: 0.8rem; font-weight: bold; }
+
+        /* ÁREA DAS CARTELAS */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            width: 95%;
+            max-width: 1300px;
+            padding: 20px;
+        }
+
+        .bingo-card {
+            background: var(--card-bg);
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .card-header { 
+            color: var(--gold); 
+            font-weight: 900; 
+            margin-bottom: 15px; 
+            font-size: 1rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+
+        .cell {
+            aspect-ratio: 1;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid #333;
+            transition: 0.3s;
+            color: #ccc;
+        }
+
+        .cell.marked {
+            background: linear-gradient(145deg, #ff0000, #800000);
+            color: white;
+            border-color: #ff4d4d;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            transform: scale(0.95);
+        }
+
+        .cell.free { background: var(--gold); color: #000; font-size: 0.7rem; }
+
+        /* CONTROLES */
+        .controls { 
+            position: fixed;
+            bottom: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .btn-action {
+            padding: 18px 45px;
+            border: none;
+            color: white;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-start { background: linear-gradient(to right, #ff0000, #b30000); }
+        .btn-stop { background: #333; }
+
+        .btn-action:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255, 0, 0, 0.4); }
+
+        #history-bar {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px;
+            background: #000;
+            border-top: 1px solid var(--gold);
+            margin-top: 20px;
+        }
+        
+        .history-ball {
+            display: inline-flex;
+            width: 35px;
+            height: 35px;
+            background: #222;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            margin: 0 5px;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: var(--gold);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-header">
+        <div class="logo-mini">GAME<span>FLIX</span></div>
+        <div id="status" style="color: var(--gold); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Sorteio Pausado</div>
+    </div>
+
+    <div class="draw-panel">
+        <div class="ball-count">BOLAS SORTEADAS: <span id="count">0</span>/75</div>
+        <div class="current-ball" id="ball">-</div>
+        <div id="ball-name" style="color: var(--gold); font-weight: bold; min-height: 1.2rem;"></div>
+    </div>
+
+    <div id="history-bar">
+        </div>
+
+    <div class="cards-container" id="cards-container"></div>
+
+    <div class="controls">
+        <button id="btnAuto" class="btn-action btn-start" onclick="toggleAuto()">Iniciar Auto</button>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const qtd = parseInt(urlParams.get('qtd')) || 1;
+        const container = document.getElementById('cards-container');
+        let drawnBalls = [];
+        let autoInterval = null;
+
+        // Iniciar cartelas
+        for(let i = 1; i <= qtd; i++) createCard(i);
+
+        function createCard(id) {
+            const card = document.createElement('div');
+            card.className = 'bingo-card';
+            card.innerHTML = `<div class="card-header">Cartela Oficial #${id}</div>`;
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+            
+            // Números oficiais de Bingo (B=1-15, I=16-30, etc)
+            let cardNums = [];
+            for(let col=0; col<5; col++) {
+                let start = col * 15 + 1;
+                let colNums = Array.from({length: 15}, (_, i) => i + start)
+                                   .sort(() => Math.random() - 0.5)
+                                   .slice(0, 5);
+                cardNums.push(...colNums);
+            }
+            
+            cardNums.forEach((num, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                if(index === 12) {
+                    cell.innerText = "FREE";
+                    cell.classList.add('free', 'marked');
+                } else {
+                    cell.innerText = num;
+                    cell.onclick = () => cell.classList.toggle('marked');
+                }
+                grid.appendChild(cell);
+            });
+            card.appendChild(grid);
+            container.appendChild(card);
+        }
+
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            msg.rate = 0.9; // Velocidade da voz
+            msg.pitch = 1;
+            msg.lang = 'pt-BR';
+            window.speechSynthesis.speak(msg);
+        }
+
+        function drawBall() {
+            if(drawnBalls.length >= 75) {
+                toggleAuto();
+                return alert("Bingo Completo!");
+            }
+            
+            let ball;
+            do { ball = Math.floor(Math.random() * 75) + 1; } while(drawnBalls.includes(ball));
+
+            drawnBalls.push(ball);
+            
+            // Atualiza UI
+            const ballEl = document.getElementById('ball');
+            ballEl.innerText = ball;
+            document.getElementById('count').innerText = drawnBalls.length;
+            
+            // Voz
+            speak("Número " + ball);
+
+            // Histórico
+            const hist = document.getElementById('history-bar');
+            const hBall = document.createElement('div');
+            hBall.className = 'history-ball';
+            hBall.innerText = ball;
+            hist.prepend(hBall);
+        }
+
+        function toggleAuto() {
+            const btn = document.getElementById('btnAuto');
+            const status = document.getElementById('status');
+
+            if(autoInterval) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+                btn.innerText = "Iniciar Auto";
+                btn.classList.replace('btn-stop', 'btn-start');
+                status.innerText = "Sorteio Pausado";
+            } else {
+                drawBall(); // Primeira bola imediata
+                autoInterval = setInterval(drawBall, 4000); // Sorteia a cada 4 segundos
+                btn.innerText = "Pausar Auto";
+                btn.classList.replace('btn-start', 'btn-stop');
+                status.innerText = "Sorteio Ativo";
+            }
+        }
+    </script>
+</body>
+</html>

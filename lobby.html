@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEFLIX | ESCOLHA</title>
+    <style>
+        :root { --bg-dark: #020202; --neon-red: #ff0000; --gold: #d4af37; --white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-dark); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+        #bg-image { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: url('https://casinoespana.club/wp-content/uploads/2024/02/bonos_de_bingo_banner.webp'); 
+            background-size: cover; background-position: center; filter: blur(12px) brightness(0.3);
+        }
+
+        header { padding: 30px; text-align: center; }
+        .hero-title { font-size: 2.5rem; font-weight: 900; color: white; text-transform: uppercase; }
+        .hero-title span { color: var(--neon-red); text-shadow: 0 0 15px var(--neon-red); }
+        .instr { color: var(--gold); letter-spacing: 2px; margin-top: 10px; text-transform: uppercase; font-weight: bold; }
+
+        .selection-container {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+            width: 95%; max-width: 1000px; padding-bottom: 120px; /* Espaço para o botão de saldo */
+        }
+
+        .card-option {
+            background: rgba(15, 15, 15, 0.9); border: 2px solid #333; border-radius: 20px;
+            padding: 15px; cursor: pointer; transition: 0.4s; text-align: center;
+        }
+        .card-img-wrapper { width: 100%; height: 230px; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); margin-bottom: 10px; }
+        .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .card-label { color: white; font-weight: 800; text-transform: uppercase; }
+
+        .card-option:hover { border-color: var(--neon-red); transform: translateY(-5px); box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
+
+        /* BOTÃO DE SALDO FIXO */
+        .balance-footer {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(0,0,0,0.9); border-top: 2px solid var(--gold);
+            padding: 20px; display: flex; justify-content: center; z-index: 100;
+        }
+        .btn-add-saldo {
+            background: transparent; border: 2px solid var(--gold); color: var(--gold);
+            padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer;
+            transition: 0.3s; text-transform: uppercase;
+        }
+        .btn-add-saldo:hover { background: var(--gold); color: black; box-shadow: 0 0 20px var(--gold); }
+
+        @media (min-width: 992px) {
+            .selection-container { grid-template-columns: repeat(4, 1fr); }
+            .hero-title { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-image"></div>
+    
+    <header>
+        <h1 class="hero-title">GAME<span>FLIX</span></h1>
+        <p class="instr">Escolha suas cartelas</p>
+    </header>
+
+    <div class="selection-container">
+        <div class="card-option" onclick="startGame(1)">
+            <div class="card-img-wrapper"><img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731709/ChatGPT_Image_20_de_abr._de_2026_21_28_36_psllzv.png"></div>
+            <div class="card-label">1 Cartela</div>
+        </div>
+        <div class="card-option" onclick="startGame(2)">
+            <div class="card-img-wrapper"><img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731702/ChatGPT_Image_20_de_abr._de_2026_21_31_03_kbenai.png"></div>
+            <div class="card-label">2 Cartelas</div>
+        </div>
+        <div class="card-option" onclick="startGame(3)">
+            <div class="card-img-wrapper"><img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731713/ChatGPT_Image_20_de_abr._de_2026_21_28_36_-_Copia_2_lxl5xh.png"></div>
+            <div class="card-label">3 Cartelas</div>
+        </div>
+        <div class="card-option" onclick="startGame(4)">
+            <div class="card-img-wrapper"><img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731704/ChatGPT_Image_20_de_abr._de_2026_21_26_35_bmgshy.png"></div>
+            <div class="card-label">4 Cartelas</div>
+        </div>
+    </div>
+
+    <div class="balance-footer">
+        <button class="btn-add-saldo" onclick="alert('Abrindo área de Depósito...')">+ Adicionar Saldo</button>
+    </div>
+
+    <script>
+        function startGame(num) {
+            // Envia o número de cartelas para a próxima página via URL
+            window.location.href = "jogo.html?qtd=" + num;
+        }
+    </script>
+</body>
+</html>
