@@ -16,14 +16,14 @@
 
         body {
             background-color: var(--bg-dark);
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         #bg-image {
-            position: fixed;
+            position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             background-size: cover;
@@ -39,32 +39,24 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 20px 15px;
         }
 
-        .hero-title { 
-            font-size: 2.5rem; 
-            font-weight: 900; 
-            margin-bottom: 30px; 
-            color: var(--white);
-            text-transform: uppercase;
-        }
+        .hero-title { font-size: 4rem; font-weight: 900; margin-bottom: 40px; color: var(--white); }
         .hero-title span { color: var(--neon-red); text-shadow: 0 0 15px var(--neon-red); }
 
-        /* CONTAINER AJUSTADO PARA 2 COLUNAS */
         .selection-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px;
-            width: 100%;
-            max-width: 1000px;
+            display: flex;
+            gap: 20px; /* Reduzi um pouco o espaço para caber as 4 opções na tela */
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .card-option {
             background: rgba(15, 15, 15, 0.9);
             border: 2px solid #333;
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
+            width: 220px; /* Ajuste leve na largura para melhor encaixe */
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
@@ -73,37 +65,26 @@
             gap: 15px;
         }
 
-        /* PROPORÇÃO DE PC APLICADA */
         .card-img-wrapper {
             width: 100%;
-            height: 230px; 
+            height: 230px;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--gold);
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-            background: #000;
         }
 
         .card-img-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Mantém o preenchimento total como no PC */
+            object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        /* AJUSTE PARA TELAS DE PC (4 LADO A LADO) */
-        @media (min-width: 992px) {
-            .selection-container {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
-            .hero-title { font-size: 4rem; }
-        }
-
-        .card-option:hover, .card-option:active {
+        .card-option:hover {
             border-color: var(--neon-red);
-            transform: translateY(-8px);
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            transform: translateY(-12px);
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.5);
             background: rgba(30, 0, 0, 0.4);
         }
 
@@ -112,21 +93,20 @@
         }
 
         .card-label {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 800;
             color: var(--white);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        footer { 
-            text-align: center; 
-            padding: 15px; 
-            background: #000; 
-            font-size: 12px; 
-            color: #444; 
-            border-top: 1px solid #111;
+        .card-sublabel {
+            font-size: 0.75rem;
+            color: var(--gold);
+            text-transform: uppercase;
         }
+
+        footer { text-align: center; padding: 15px; background: #000; font-size: 12px; color: #444; border-top: 1px solid #111; }
         footer b { color: var(--gold); }
     </style>
 </head>
@@ -135,40 +115,52 @@
     <div id="bg-image"></div>
 
     <div id="lobby">
-        <h1 class="hero-title">GAME<span>FLIX</span> BINGO</h1>
+        <h1 class="hero-title">DIONATAN<span>GAY</span> BINGO</h1>
         
         <div class="selection-container">
             <div class="card-option" onclick="startGame(1)">
                 <div class="card-img-wrapper">
                     <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731709/ChatGPT_Image_20_de_abr._de_2026_21_28_36_psllzv.png" alt="1 Cartela">
                 </div>
-                <div class="card-label">1 Cartela</div>
+                <div>
+                    <div class="card-label">1 Cartela</div>
+                    <div class="card-sublabel">Iniciante</div>
+                </div>
             </div>
 
             <div class="card-option" onclick="startGame(2)">
                 <div class="card-img-wrapper">
                     <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731702/ChatGPT_Image_20_de_abr._de_2026_21_31_03_kbenai.png" alt="2 Cartelas">
                 </div>
-                <div class="card-label">2 Cartelas</div>
+                <div>
+                    <div class="card-label">2 Cartelas</div>
+                    <div class="card-sublabel">Avançado</div>
+                </div>
             </div>
 
             <div class="card-option" onclick="startGame(3)">
                 <div class="card-img-wrapper">
                     <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731713/ChatGPT_Image_20_de_abr._de_2026_21_28_36_-_Copia_2_lxl5xh.png" alt="3 Cartelas">
                 </div>
-                <div class="card-label">3 Cartelas</div>
+                <div>
+                    <div class="card-label">3 Cartelas</div>
+                    <div class="card-sublabel">Modo Tubarão</div>
+                </div>
             </div>
 
             <div class="card-option" onclick="startGame(4)">
                 <div class="card-img-wrapper">
                     <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1776731704/ChatGPT_Image_20_de_abr._de_2026_21_26_35_bmgshy.png" alt="4 Cartelas">
                 </div>
-                <div class="card-label">4 Cartelas</div>
+                <div>
+                    <div class="card-label">4 Cartelas</div>
+                    <div class="card-sublabel">Modo Lenda</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <footer>Desenvolvido por <b>Yan Ferreira - GAMEFLIX</b></footer>
+    <footer>Desenvolvido por <b>Yan Ferreira - GAMEFLIX</b> &copy; 2026.</footer>
 
     <script>
         function startGame(num) {
